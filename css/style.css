@@ -1,0 +1,14 @@
+#topo{
+	text-align: center;
+	height: 175px;
+}
+#topo img{
+	margin-top: 25px;
+}
+#btnConsultar{
+	text-align: center;
+}
+#result-area{
+	margin: 50px;
+	text-align: center;
+}

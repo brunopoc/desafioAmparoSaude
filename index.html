@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Plano FaleMais - Orapma</title>
+		<!-- CHAMA DOS BOOTSTRAP -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		<!-- Chamada dos arquivos customizados de css -->
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+	<body>
+		<div class="container" id="topo">
+			<div class="row">
+				<div class="col-md-12">
+					<img src="img/banner.jpg">
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<form>
+						<div class="row">
+							<div class="form-group col-md-4">
+								<div class="row">
+									<label for="cidOrigem">
+										<div class="col-md-8">
+											<span>DDD da cidade de Origem:</span>
+										</div>
+										<div class="col-md-4">
+											<select class="form-control" id="cidOrigem">
+												<option>011</option>
+												<option>016</option>
+												<option>017</option>
+												<option>018</option>
+											</select>
+										</div>
+									</label>
+									<label for="cidDestino">
+											<div class="col-md-8">
+												<span>DDD da cidade de Destino:</span>
+											</div>
+											<div class="col-md-4">
+												<select class="form-control" id="cidDestino">
+													<option>011</option>
+													<option>016</option>
+													<option>017</option>
+													<option>018</option>
+												</select>
+											</div>
+									</label>
+								</div>
+							</div>
+							<div class="form-group col-md-4">
+								<div class="row">
+									<label for="tempoLigacao">
+										<div class="col-md-8">
+											<span>Quantos minutos duraram a ligação?</span>
+										</div>
+										<div class="col-md-4">
+											<input class="form-control" type="number" name="tempoLigacao" id="tempoLigacao">
+										</div>
+									</label>
+								</div>
+							</div>
+							<div class="form-group col-md-4">
+								<div class="row">
+									<label for="planoFaleMais">
+										<div class="col-md-6">
+											<span>Qual o plano Fale Mais?</span>
+										</div>
+										<div class="col-md-6">
+											<select class="form-control" id="planoFaleMais">
+												<option value="30">FaleMais 30</option>
+												<option value="60">FaleMais 60 </option>
+												<option value="120">FaleMais 120</option>
+											</select>
+										</div>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="row" id="btnConsultar">
+							<button type="button" class="btn btn-primary">Consultar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="row" id="result-area">
+				<div class="col-md-6">
+					<label>Valor Com o Plano FaleMais: <br><span id="valorComFaleMais"></span></label>
+				</div>
+				<div class="col-md-6">
+					<label>Valor Sem o Plano FaleMais: <br><span id="valorSemFaleMais"></span></label>
+				</div>
+			</div>
+		</div>
+
+	</body>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#result-area').hide();
+		});
+		$('button').click(function(e){
+			e.preventDefault();
+			let cidOrigem = $('#cidOrigem').val();
+			let cidDestino = $('#cidDestino').val();
+			let tempoLigacao = $('#tempoLigacao').val();
+			let planoFaleMais = $('#planoFaleMais').val();
+			verificaDDD(cidOrigem, cidDestino, tempoLigacao, planoFaleMais);
+			$('#result-area').fadeIn();
+		});
+
+		function verificaDDD(cidOrigem, cidDestino, tempoLigacao, planoFaleMais){
+			switch(cidOrigem){
+				case'011':
+					switch(cidDestino){
+						case'016':
+							var valorTarifa = 1.90;
+						break;
+						case'017':
+							var valorTarifa = 1.70;
+						break;
+						case'018':
+							var valorTarifa = 0.90;
+						break;
+					}
+				break;
+				case'016':
+					if(cidDestino == '011'){
+						var valorTarifa = 2.90;
+					}
+				break;
+				case'017':
+					if(cidDestino == '011'){
+						var valorTarifa = 2.70;
+					}
+				break;
+				case'018':
+					if(cidDestino == '011'){
+						var valorTarifa = 1.90;
+					}
+				break;
+			}
+			var result = calculaTarifa(tempoLigacao, valorTarifa, 0);
+			$('#result-area span#valorSemFaleMais').html(result);
+			verificaFaleMais(planoFaleMais, tempoLigacao, result, valorTarifa);
+		}
+		function verificaFaleMais(planoFaleMais, tempoLigacao, result, valorTarifa){
+			switch(planoFaleMais){
+				case '30':
+					if(tempoLigacao < 30){
+						var result = 0.00;
+						
+					} else {
+						tempoLigacao = tempoLigacao - 30;
+						var result = calculaTarifa(tempoLigacao, valorTarifa, 10);
+					}
+				break;
+				case '60':
+					if(tempoLigacao < 60){
+						var result = 0.00;
+					} else {
+						tempoLigacao = tempoLigacao - 60;
+						var result = calculaTarifa(tempoLigacao, valorTarifa, 10);
+						
+					}
+				break;
+				case '120':
+					if(tempoLigacao < 120){
+						result = 0.00;
+					} else {
+						tempoLigacao = tempoLigacao - 120;
+						var result = calculaTarifa(tempoLigacao, valorTarifa, 10);
+						
+					}
+				break;
+			}
+			$('#result-area span#valorComFaleMais').html(result);
+		}
+
+		function calculaTarifa(tempoLigacao, valorTarifa, porcentagem){
+			if(porcentagem != 0) {
+				var valorTarifa = valorTarifa + (valorTarifa*(10/100));
+				var result = tempoLigacao * valorTarifa;
+				result = 'R$ ' + result.toFixed(2);
+				return result
+			} else {
+				var result = tempoLigacao * valorTarifa;
+				result = 'R$ ' + result.toFixed(2);
+				return result
+			}
+		}
+	</script>
+
+</html>
